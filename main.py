@@ -9,21 +9,22 @@ def main(argv=None):
         argv = sys.argv
 
     # TODO proccess args
-    pathToCorpus = r"C:\Users\dickm\Documents\Projects\ML\DevProjects\ml-upmce-text-tfidf-python\testdocuments.txt"
-    resultPath = r"C:\Users\dickm\Documents\Projects\ML\DevProjects\ml-upmce-text-tfidf-python\testdocuments_results.txt"
+    pathToCorpus = r"C:\Users\dickm\Documents\Projects\ML\DevProjects\ml-upmce-text-tfidf-python\testhydrateddocuments.txt"
+    resultPath = r"C:\Users\dickm\Documents\Projects\ML\DevProjects\ml-upmce-text-tfidf-python\testhydrateddocuments_results.txt"
     maxTermsPerDoc = 5
     
     fileNames, fileBlobList = getBlobListByPath(pathToCorpus)
 
     resultFile = open(resultPath, mode='w')
 
+    print("Writing report...")
     for i in range(len(fileBlobList)):
         #line = fileBlobList[i] # file Name.
         scores = {word: tfidf(word, fileBlobList[i], fileBlobList) for word in fileBlobList[i].words}
         sorted_words = sorted(scores.items(), key=lambda x: x[1], reverse=True)
         
-        for word, score in sorted_words[:maxTermsPerDoc]:
-            resultFile.write("File: {}\tWord: {}, TF-IDF: {}\n".format(fileNames[i], word, round(score, 5)))
+        for word, score in sorted_words:
+            resultFile.write("{},{},{}\n".format(fileNames[i], word, round(score, 5)))
     
     resultFile.close()
     
